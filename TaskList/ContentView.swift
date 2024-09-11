@@ -21,6 +21,7 @@ let meses = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agos
 let mesAtual = meses[calendario.component(.month, from:hoje) - 1]
 
 struct Lembrete {
+    let id = UUID()
     var title : String
     var data : Date
 }
@@ -35,6 +36,7 @@ struct ContentView: View {
     @State private var taskDate = Date()
     @State private var isEditing = false
     @State private var lembretes: [Lembrete] = []
+    @State private var mostrarAlerta = false
 
     var body: some View {
         VStack {
@@ -42,6 +44,8 @@ struct ContentView: View {
                 Text("Hoje é dia \(diaAtual) de \(mesAtual)")
                     .font(.title).bold()
                 
+                Text("Cadastre uma Tarefa:")
+                    .font(.title2).bold()
                 TextField("Digite sua tarefa", text: $taskText, onEditingChanged: {
                     editing in self.isEditing = editing
                 })
@@ -60,12 +64,23 @@ struct ContentView: View {
                     .padding()
                     
                     Button(action: {
-                        let novaTarefa = Lembrete(title:taskText, data:taskDate )
-                        lembretes.append(novaTarefa)
+                        if taskText != "" {
+                            let novaTarefa = Lembrete(title:taskText, data:taskDate )
+                            lembretes.append(novaTarefa)
+                            
+                            // Limpa o TextField
+                            taskText = ""
+                        } else {
+                            // exibir um alerta para preencher a tarefa
+                            mostrarAlerta = true
+                        }
                         
                     }) {
                         Image(systemName: "plus.square.fill")
                             .font(.largeTitle)
+                    }.alert(isPresented: $mostrarAlerta) {
+                        Alert(title: Text("Campo Vazio"),
+                              message: Text("Por favor, digite uma tarefa."))
                     }
                     .padding()
                 }
@@ -73,16 +88,61 @@ struct ContentView: View {
             Divider().background(Color.blue)
             
             VStack{
-                Text("Seus próximos lembretes:")
+                Text("Suas próximas tarefas:")
                     .font(.title2).bold()
+                
+                List {
+                    ForEach(agruparLembretesPorMes(lembretes: lembretes).sorted(by: { $0.key > $1.key }), id: \.key) { mesAno, lembretesDoMes in
+                        Section(header: Text(mesAno)) {
+                            ForEach(lembretesDoMes, id: \.title) { lembrete in
+                                HStack {
+                                    Text(lembrete.title)
+                                    Spacer()
+                                    Text(lembrete.data, style: .date)
+                                }
+                            }
+                            .onDelete(perform: deleteLembrete)
+                        }
+                    }
+                }.cornerRadius(10)
             }
             
             Spacer()
         }
         .padding()
     }
+    
+    func deleteLembrete(at offsets: IndexSet) {
+        // Iterar sobre os offsets para remover os lembretes correspondentes
+        for offset in offsets {
+            // Encontrar o lembrete a ser excluído com base no seu ID
+            if let lembreteIndex = lembretes.firstIndex(where: { $0.id == lembretes[offset].id }) {
+                // Remover o lembrete encontrado do array lembretes
+                lembretes.remove(at: lembreteIndex)
+            }
+        }
+    }
 }
 
 #Preview {
     ContentView()
 }
+
+func agruparLembretesPorMes(lembretes: [Lembrete]) -> [String: [Lembrete]] {
+    var lembretesAgrupados: [String: [Lembrete]] = [:]
+
+    for lembrete in lembretes {
+        let componentesData = Calendar.current.dateComponents([.month, .year], from: lembrete.data)
+        let mesAno = "\(meses[componentesData.month! - 1]) de \(componentesData.year!)" // Criar chave "Mês de Ano"
+
+        if var lembretesDoMes = lembretesAgrupados[mesAno] {
+            lembretesDoMes.append(lembrete)
+            lembretesAgrupados[mesAno] = lembretesDoMes
+        } else {
+            lembretesAgrupados[mesAno] = [lembrete]
+        }
+    }
+
+    return lembretesAgrupados
+}
+
