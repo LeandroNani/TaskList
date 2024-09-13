@@ -17,7 +17,7 @@ let calendario = Calendar.current
 
 // Extrai o dia do mês da data atual
 let diaAtual = calendario.component(.day, from: hoje)
-let meses = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"]
+let meses = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 let mesAtual = meses[calendario.component(.month, from:hoje) - 1]
 
 struct Lembrete {
@@ -92,7 +92,7 @@ struct ContentView: View {
                     .font(.title2).bold()
                 
                 List {
-                    ForEach(agruparLembretesPorMes(lembretes: lembretes).sorted(by: { $0.key > $1.key }), id: \.key) { mesAno, lembretesDoMes in
+                    ForEach(agruparLembretesPorMes(lembretes: lembretes).sorted(by: { $0.key < $1.key }), id: \.key) { mesAno, lembretesDoMes in
                         Section(header: Text(mesAno)) {
                             ForEach(lembretesDoMes, id: \.title) { lembrete in
                                 HStack {
@@ -133,16 +133,39 @@ func agruparLembretesPorMes(lembretes: [Lembrete]) -> [String: [Lembrete]] {
 
     for lembrete in lembretes {
         let componentesData = Calendar.current.dateComponents([.month, .year], from: lembrete.data)
-        let mesAno = "\(meses[componentesData.month! - 1]) de \(componentesData.year!)" // Criar chave "Mês de Ano"
+        let mesAno = "\(meses[componentesData.month! - 1]) \(componentesData.year!)" // Criar chave "Mês de Ano"
 
         if var lembretesDoMes = lembretesAgrupados[mesAno] {
             lembretesDoMes.append(lembrete)
+            lembretesDoMes.sort(by: { $0.data < $1.data }) // aqui eu ordeno os lembretes dentro daqueles meses/anos
             lembretesAgrupados[mesAno] = lembretesDoMes
         } else {
             lembretesAgrupados[mesAno] = [lembrete]
         }
     }
-
-    return lembretesAgrupados
+    
+    //aqui eu ordeno os arrays de meses/ano
+    //utilizei o metodo do Dictionary para converter um valor de tuplas de volta para um dicionario
+    let lembretesAgrupadosOrdenados = Dictionary(uniqueKeysWithValues: lembretesAgrupados.sorted { (mesAno1, mesAno2) -> Bool in
+        
+        let date1 = (convert(mesAno1.key, from: "MMMM yyyy", to: "MM-yyyy"))
+        let date2 = (convert(mesAno2.key, from: "MMMM yyyy", to: "MM-yyyy"))
+        
+        
+           return date1! < date2!
+       })
+        return lembretesAgrupadosOrdenados
 }
 
+//funcao do stackoverflow para converter string em data
+func convert(_ dateString: String, from initialFormat: String, to targetFormat: String? = nil, _ locale: Locale? = nil) -> String? {
+    let formatter = DateFormatter()
+    formatter.dateFormat = initialFormat
+    guard let date = formatter.date(from: dateString) else { return nil }
+    
+    if let newFormat = targetFormat {
+        formatter.dateFormat = targetFormat
+    }
+    formatter.locale = locale
+    return formatter.string(from: date)
+}
