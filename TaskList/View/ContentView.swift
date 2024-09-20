@@ -34,6 +34,7 @@ struct ContentView: View {
                     Header(diaAtual: diaAtual, meses: meses)
                     Divider().background(Color.blue)
                     Inputs(viewModel: viewModel)//aqui passo a viewModel como parametro pra struct
+                    Divider().background(Color.blue)
                     TaskList(viewModel: viewModel)
                     Spacer()
                 }
