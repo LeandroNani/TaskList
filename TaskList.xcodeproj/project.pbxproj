@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B7A63ED02C9DE68B00624061 /* Lembrete.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7A63ECF2C9DE68B00624061 /* Lembrete.swift */; };
+		B7A63ED22C9DE70000624061 /* TaskListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7A63ED12C9DE70000624061 /* TaskListViewModel.swift */; };
 		B7D95ABE2C920EAA000D8DFB /* TaskListApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7D95ABD2C920EAA000D8DFB /* TaskListApp.swift */; };
 		B7D95AC02C920EAA000D8DFB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7D95ABF2C920EAA000D8DFB /* ContentView.swift */; };
 		B7D95AC22C920EAC000D8DFB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B7D95AC12C920EAC000D8DFB /* Assets.xcassets */; };
@@ -14,6 +16,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B7A63ECF2C9DE68B00624061 /* Lembrete.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lembrete.swift; sourceTree = "<group>"; };
+		B7A63ED12C9DE70000624061 /* TaskListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskListViewModel.swift; sourceTree = "<group>"; };
 		B7D95ABA2C920EAA000D8DFB /* TaskList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TaskList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B7D95ABD2C920EAA000D8DFB /* TaskListApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskListApp.swift; sourceTree = "<group>"; };
 		B7D95ABF2C920EAA000D8DFB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -32,6 +36,30 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B7A63ECC2C9DE45700624061 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				B7A63ECF2C9DE68B00624061 /* Lembrete.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		B7A63ECD2C9DE46600624061 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				B7D95ABF2C920EAA000D8DFB /* ContentView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		B7A63ECE2C9DE57400624061 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				B7A63ED12C9DE70000624061 /* TaskListViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 		B7D95AB12C920EAA000D8DFB = {
 			isa = PBXGroup;
 			children = (
@@ -51,8 +79,10 @@
 		B7D95ABC2C920EAA000D8DFB /* TaskList */ = {
 			isa = PBXGroup;
 			children = (
+				B7A63ECE2C9DE57400624061 /* ViewModel */,
+				B7A63ECD2C9DE46600624061 /* View */,
+				B7A63ECC2C9DE45700624061 /* Models */,
 				B7D95ABD2C920EAA000D8DFB /* TaskListApp.swift */,
-				B7D95ABF2C920EAA000D8DFB /* ContentView.swift */,
 				B7D95AC12C920EAC000D8DFB /* Assets.xcassets */,
 				B7D95AC32C920EAC000D8DFB /* Preview Content */,
 			);
@@ -138,7 +168,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				B7D95AC02C920EAA000D8DFB /* ContentView.swift in Sources */,
+				B7A63ED22C9DE70000624061 /* TaskListViewModel.swift in Sources */,
 				B7D95ABE2C920EAA000D8DFB /* TaskListApp.swift in Sources */,
+				B7A63ED02C9DE68B00624061 /* Lembrete.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
