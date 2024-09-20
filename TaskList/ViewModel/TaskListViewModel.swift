@@ -11,7 +11,9 @@ import SwiftUI
 // Esse arquivo possui toda a logica da aplicacao e atua como um intermediario entre a model e a view
 
 class TaskListViewModel: ObservableObject {
+    let meses = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
+    
     // esses atributos marcados como publicados sao observadas pela view, e assim que mudam, a view se atualiza
     @Published var taskText: String = ""
     @Published var taskDate: Date = Date()
